@@ -1,0 +1,19 @@
+package e
+
+const (
+	SUCCESS        = 200
+	ERROR          = 500
+	INVALID_PARAMS = 400
+
+	// code = 100xx 通用/系统级错误
+	ERROR_AUTH_CHECK_TOKEN_FAIL    = 10001
+	ERROR_AUTH_CHECK_TOKEN_TIMEOUT = 10002
+
+	// code = 200xx 用户模块
+	ERROR_USER_NOT_EXIST = 20001
+	ERROR_USER_EXIST     = 20002
+	ERROR_USER_WRONG_PWD = 20003
+
+	// code = 300xx 任务模块
+	ERROR_TASK_NOT_EXIST = 30001
+)
