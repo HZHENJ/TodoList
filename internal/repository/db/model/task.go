@@ -2,7 +2,7 @@ package model
 
 import "gorm.io/gorm"
 
-type task struct {
+type Task struct {
 	gorm.Model
 	Title    string `gorm:"not null" json:"title"`
 	Content  string `gorm:"longtext" json:"content"`
