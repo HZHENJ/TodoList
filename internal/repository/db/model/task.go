@@ -8,6 +8,6 @@ type Task struct {
 	Content  string `gorm:"longtext" json:"content"`
 	Status   int    `gorm:"default:0" json:"status"`
 	Category string `json:"category"`
-	User     User   `gorm:"ForeignKey:UserId" json:"user,omitempty"`
 	UserId   uint   `gorm:"not null" json:"user_id"`
+	User     *User  `gorm:"foreignKey:UserId" json:"user,omitempty"`
 }

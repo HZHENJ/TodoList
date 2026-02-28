@@ -1,1 +1,47 @@
 package dao
+
+import (
+	"context"
+	"to-do-list/internal/repository/db/model"
+
+	"gorm.io/gorm"
+)
+
+type TaskDao interface {
+	CreateTask(ctx context.Context, task *model.Task) error
+	ListTasks(ctx context.Context, userId uint, page, pageSize int) ([]*model.Task, int64, error)
+}
+
+type taskDao struct {
+	db *gorm.DB
+}
+
+func NewTaskDao(db *gorm.DB) TaskDao {
+	return &taskDao{db: db}
+}
+
+// CreateTask 创建用户
+func (dao *taskDao) CreateTask(ctx context.Context, task *model.Task) error {
+	return dao.db.WithContext(ctx).Create(task).Error
+}
+
+// ListTasks 列出所有任务 分页
+func (dao *taskDao) ListTasks(ctx context.Context, userId uint, page, pageSize int) ([]*model.Task, int64, error) {
+	var tasks []*model.Task
+	var total int64
+
+	query := dao.db.WithContext(ctx).Model(&model.Task{}).Where("user_id = ?", userId)
+
+	if err := query.Count(&total).Error; err != nil {
+		return nil, 0, err
+	}
+
+	offset := (page - 1) * pageSize
+	err := query.
+		Preload("User").
+		Offset(offset).
+		Limit(pageSize).
+		Order("created_at desc").
+		Find(&tasks).Error
+	return tasks, total, err
+}
