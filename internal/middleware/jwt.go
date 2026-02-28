@@ -51,6 +51,7 @@ func JWT() gin.HandlerFunc {
 		}
 
 		// 这里可以其他的内容
+		c.Set("UserId", claims.UserId)
 		c.Set("Username", claims.Username)
 
 		c.Next()

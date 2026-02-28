@@ -13,7 +13,7 @@ var jwtSecret = []byte(os.Getenv("JWT_SECRET"))
 
 // Claims 自定义载荷
 type Claims struct {
-	Id        uint   `json:"id"`
+	UserId    uint   `json:"user_id"`
 	Email     string `json:"email"`
 	Username  string `json:"username"`
 	Authority int    `json:"authority"`
@@ -22,11 +22,11 @@ type Claims struct {
 }
 
 // GenerateToken 签发用户Token
-func GenerateToken(id uint, email, username string, authority int) (string, error) {
+func GenerateToken(userId uint, email, username string, authority int) (string, error) {
 	now := time.Now()
 	exp := now.Add(time.Hour * 1)
 	claims := Claims{
-		Id:        id,
+		UserId:    userId,
 		Email:     email,
 		Username:  username,
 		Authority: authority,
