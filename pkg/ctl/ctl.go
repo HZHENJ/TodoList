@@ -14,11 +14,6 @@ type Response struct {
 	Error string      `json:"error"`
 }
 
-type DataList struct {
-	List  interface{} `json:"list"`
-	Total int64       `json:"total"`
-}
-
 type Wrapper struct {
 	C *gin.Context
 }
@@ -39,15 +34,6 @@ func (w *Wrapper) Response(httpCode, errorCode int, data interface{}) {
 // Success 成功
 func (w *Wrapper) Success(data interface{}) {
 	w.Response(http.StatusOK, e.SUCCESS, data)
-}
-
-// ResponseList 分页列表响应
-// list: 数据切片, total: 总数
-func (w *Wrapper) ResponseList(list interface{}, total int64) {
-	w.Response(http.StatusOK, e.SUCCESS, DataList{
-		List:  list,
-		Total: total,
-	})
 }
 
 // Error 错误响应
