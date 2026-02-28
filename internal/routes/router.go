@@ -35,10 +35,11 @@ func NewRouter() *gin.Engine {
 		{
 			authed.POST("/user/logout", v1.UserLogout)
 
-			//taskGroup := apiv1.Group("/task")
-			//{
-			//
-			//}
+			taskGroup := authed.Group("/task")
+			{
+				taskGroup.POST("/create", v1.CreateTask)
+				taskGroup.GET("/list", v1.ListTasks)
+			}
 		}
 	}
 	return r
