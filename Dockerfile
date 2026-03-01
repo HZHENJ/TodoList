@@ -9,7 +9,7 @@ WORKDIR /app
 
 # 1. 先拷贝 go.mod 和 go.sum 下载依赖 (利用 Docker 缓存机制)
 COPY go.mod go.sum ./
-RUN go mod tidy
+RUN go mod download
 
 # 2. 拷贝源代码
 COPY . .
