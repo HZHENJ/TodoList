@@ -52,7 +52,7 @@ jobs:
             docker run -d \
               --name todolist-app \
               --network todolist_network \
-              -p 3000:3000 \
+              -p 8080:8080 \
               --restart always \
               ${{ secrets.DOCKER_USERNAME }}/todolist-server:latest
             
