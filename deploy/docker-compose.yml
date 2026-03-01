@@ -1,6 +1,5 @@
 version: '3.7'
 
-# 1. 明确指定网络名称，防止 docker-compose 瞎猜前缀
 networks:
   todolist_net:
     driver: bridge
@@ -17,8 +16,6 @@ services:
       - MYSQL_USER=todolist
       - MYSQL_PASSWORD=todolist
       - TZ=Asia/Shanghai
-    volumes:
-      - ./config/sql:/docker-entrypoint-initdb.d/
     ports:
       - "127.0.0.1:3306:3306"
     networks:
@@ -29,8 +26,8 @@ services:
     image: redis:latest
     restart: always
     volumes:
-      - ./config/redis/data:/data
+      - ./redis-data:/data
     ports:
-      - "127.0.0.1:6379:6379" # 同样只允许本地访问
+      - "127.0.0.1:6379:6379"
     networks:
       - todolist_net

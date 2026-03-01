@@ -32,9 +32,8 @@ jobs:
           host: ${{ secrets.AWS_HOST }}
           username: ${{ secrets.AWS_USERNAME }}
           key: ${{ secrets.AWS_SSH_KEY }}
-          # 将 compose 文件和 config 目录一并传过去，确保挂载目录存在
-          source: "docker-compose.yml,config/"
-          target: "~/todolist"
+          source: "deploy/"
+          target: "~/todolist_env"
 
       # 5. 远程连接 AWS 服务器进行部署
       - name: Deploy to AWS EC2
@@ -44,21 +43,12 @@ jobs:
           username: ${{ secrets.AWS_USERNAME }}
           key: ${{ secrets.AWS_SSH_KEY }}
           script: |
-            # --- 步骤 A: 准备基础设施 ---
-            # 进入刚刚传好文件的目录
-            cd ~/todolist
+            cd ~/todolist_env/deploy
             
-            # 一键拉起/更新 MySQL、Redis 以及极其关键的 todolist_network 网络
-            docker compose up -d
+            docker-compose up -d
             
-            # --- 步骤 B: 更新业务程序 ---
-            # 拉取刚刚打包好的最新 Go 镜像
             docker pull ${{ secrets.DOCKER_USERNAME }}/todolist-server:latest
-            
-            # 删掉旧容器（如果不存在就忽略）
             docker rm -f todolist-app || true
-            
-            # 启动新容器，完美加入刚刚建好的网络！
             docker run -d \
               --name todolist-app \
               --network todolist_network \
@@ -66,5 +56,4 @@ jobs:
               --restart always \
               ${{ secrets.DOCKER_USERNAME }}/todolist-server:latest
             
-            # 清理废弃的历史镜像，保持 AWS 磁盘整洁
             docker image prune -f

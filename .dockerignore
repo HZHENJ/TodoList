@@ -5,7 +5,7 @@
 .env
 *.md
 Makefile
-docker-compose.yml
+deploy/docker-compose.yml
 # 忽略掉你本地编译产生的二进制文件
 main
 todolist-server

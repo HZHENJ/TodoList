@@ -44,3 +44,5 @@ vendor/
 # Go Workspace 本地文件 (Go 1.18+)
 go.work
 go.work.sum
+
+config/redis/data/
