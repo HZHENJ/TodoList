@@ -1,5 +1,5 @@
 # 第一阶段：构建 (Builder)
-FROM golang:1.20 as builder
+FROM golang:1.20 AS builder
 
 # 设置环境变量，开启 Go Modules，配置国内代理
 #ENV GO111MODULE=on \
