@@ -45,7 +45,7 @@ jobs:
           script: |
             cd ~/todolist_env/deploy
             
-            docker-compose up -d
+            docker compose up -d
             
             docker pull ${{ secrets.DOCKER_USERNAME }}/todolist-server:latest
             docker rm -f todolist-app || true
