@@ -1,12 +1,12 @@
 service:
-  app_mode: debug
+  app_mode: release
   http_port: :8080
 
 database:
   db_type: mysql
   user: todolist
   password: todolist
-  host: 127.0.0.1:3306
+  host: mysql:3306
   db_name: todolist
   charset: utf8mb4
   parse_time: True
@@ -14,6 +14,6 @@ database:
 
 redis:
   redis_debug: false
-  redis_addr: 127.0.0.1:6379
+  redis_addr: redis:6379
   redis_pw:
   redis_db_name: 2

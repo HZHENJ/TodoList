@@ -16,7 +16,7 @@ func NewRouter() *gin.Engine {
 	//r.Use(middleware.Cors())
 
 	r.Use(cors.New(cors.Config{
-		AllowOrigins:     []string{"https://www.lifetodo.org", "http://localhost:5173"},
+		AllowOrigins:     []string{"https://lifetodo.org", "https://www.lifetodo.org", "http://localhost:5173"},
 		AllowMethods:     []string{"GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"},
 		AllowHeaders:     []string{"Origin", "Content-Type", "Authorization", "Accept", "X-Requested-With"},
 		ExposeHeaders:    []string{"Content-Length", "Access-Control-Allow-Origin"},

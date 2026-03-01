@@ -24,8 +24,7 @@ RUN CGO_ENABLED=0 GOOS=linux go build -ldflags="-w -s" -o main cmd/server/main.g
 WORKDIR /app/publish
 RUN mkdir config && \
     cp /app/main . && \
-    cp /app/config/config.yaml ./config/
-    # 如果有静态资源，继续 cp ...
+    cp /app/config/config.prod.yaml ./config/config.yaml
 
 # 第二阶段：运行 (Runner)
 # 使用 alpine 比 busybox 更常用，且支持包管理 (apk) 方便排查问题
@@ -43,8 +42,8 @@ COPY --from=builder /app/publish .
 
 # 环境变量
 ENV GIN_MODE=release
-ENV SERVICE_PORT=:3000
+ENV SERVICE_PORT=:8080
 
-EXPOSE 3000
+EXPOSE 8080
 
 ENTRYPOINT ["./main"]
