@@ -44,16 +44,14 @@ jobs:
           key: ${{ secrets.AWS_SSH_KEY }}
           script: |
             cd ~/todolist_env/deploy
-            
+            docker compose pull
             docker compose up -d
-            
-            docker pull ${{ secrets.DOCKER_USERNAME }}/todolist-server:latest
-            docker rm -f todolist-app || true
-            docker run -d \
-              --name todolist-app \
-              --network todolist_network \
-              -p 8080:8080 \
-              --restart always \
-              ${{ secrets.DOCKER_USERNAME }}/todolist-server:latest
-            
+#            docker pull ${{ secrets.DOCKER_USERNAME }}/todolist-server:latest
+#            docker rm -f todolist-app || true
+#            docker run -d \
+#              --name todolist-app \
+#              --network todolist_network \
+#              -p 8080:8080 \
+#              --restart always \
+#              ${{ secrets.DOCKER_USERNAME }}/todolist-server:latest
             docker image prune -f
