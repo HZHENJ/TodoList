@@ -35,7 +35,7 @@ func (s *TaskService) CreateTask(cxt context.Context, userId uint, req *types.Cr
 	return newTask, e.SUCCESS
 }
 
-// ListTasks
+// ListTasks 列出所有任务列表
 func (s *TaskService) ListTasks(ctx context.Context, userId uint, req *types.ListTasksRequest) (interface{}, int) {
 	tasks, total, err := s.taskDao.ListTasks(ctx, userId, req.Page, req.PageSize)
 	if err != nil {
@@ -50,6 +50,31 @@ func (s *TaskService) ListTasks(ctx context.Context, userId uint, req *types.Lis
 	return resp, e.SUCCESS
 }
 
-// DeleteTask
-
 // UpdateTask
+func (s *TaskService) UpdateTask(ctx context.Context, taskId, userId uint, req *types.UpdateTaskRequest) (interface{}, int) {
+	updateData := make(map[string]interface{})
+	if req.Title != "" {
+		updateData["title"] = req.Title
+	}
+	if req.Content != "" {
+		updateData["content"] = req.Content
+	}
+	if req.Category != "" {
+		updateData["category"] = req.Category
+	}
+	if req.Status != nil {
+		updateData["status"] = *req.Status
+	}
+
+	if len(updateData) == 0 {
+		return nil, e.SUCCESS
+	}
+
+	err := s.taskDao.UpdateTask(ctx, taskId, userId, updateData)
+	if err != nil {
+		return nil, e.ERROR
+	}
+	return nil, e.SUCCESS
+}
+
+// DeleteTask

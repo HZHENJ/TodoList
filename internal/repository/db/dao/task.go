@@ -10,6 +10,7 @@ import (
 type TaskDao interface {
 	CreateTask(ctx context.Context, task *model.Task) error
 	ListTasks(ctx context.Context, userId uint, page, pageSize int) ([]*model.Task, int64, error)
+	UpdateTask(ctx context.Context, taskId, userId uint, updateData map[string]interface{}) error
 }
 
 type taskDao struct {
@@ -44,4 +45,18 @@ func (dao *taskDao) ListTasks(ctx context.Context, userId uint, page, pageSize i
 		Order("created_at desc").
 		Find(&tasks).Error
 	return tasks, total, err
+}
+
+// UpdateTask 更新任务
+func (dao *taskDao) UpdateTask(ctx context.Context, taskId, userId uint, updateData map[string]interface{}) error {
+	if len(updateData) == 0 {
+		return nil
+	} // 没有做任何修改
+
+	result := dao.db.WithContext(ctx).
+		Model(&model.Task{}).
+		Where("id = ? AND user_id = ?", taskId, userId).
+		Updates(updateData)
+
+	return result.Error
 }
