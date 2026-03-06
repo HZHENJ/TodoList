@@ -112,3 +112,33 @@ func UpdateTask(c *gin.Context) {
 	app.Success(data)
 
 }
+
+// DeleteTask 删除任务
+func DeleteTask(c *gin.Context) {
+	app := ctl.NewWrapper(c)
+
+	uid, exists := c.Get("UserId")
+	if !exists {
+		app.Response(http.StatusUnauthorized, e.ERROR_AUTH_CHECK_TOKEN_FAIL, nil)
+		return
+	}
+	userId := uid.(uint)
+
+	taskIdStr := c.Param("id")
+	taskIdUint64, err := strconv.ParseUint(taskIdStr, 10, 64)
+	if err != nil {
+		app.Error(e.INVALID_PARAMS, err)
+		return
+	}
+	taskId := uint(taskIdUint64)
+
+	taskDao := dao.NewTaskDao(db.DB)
+	taskService := service.NewTaskService(taskDao)
+
+	data, code := taskService.DeleteTask(c.Request.Context(), taskId, userId)
+	if code != e.SUCCESS {
+		app.Response(http.StatusOK, code, nil)
+		return
+	}
+	app.Success(data)
+}

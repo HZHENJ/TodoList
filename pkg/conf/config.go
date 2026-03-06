@@ -41,7 +41,14 @@ type Redis struct {
 func Init() {
 
 	workDir, _ := os.Getwd()
-	viper.SetConfigName("config")
+
+	env := os.Getenv("APP_ENV")
+	configName := "config"
+	if env == "prod" {
+		configName = "config.prod"
+	}
+
+	viper.SetConfigName(configName)
 	viper.SetConfigType("yaml")
 	viper.AddConfigPath(workDir + "/config")
 

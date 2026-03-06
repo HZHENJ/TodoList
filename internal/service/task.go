@@ -50,7 +50,7 @@ func (s *TaskService) ListTasks(ctx context.Context, userId uint, req *types.Lis
 	return resp, e.SUCCESS
 }
 
-// UpdateTask
+// UpdateTask 更新任务
 func (s *TaskService) UpdateTask(ctx context.Context, taskId, userId uint, req *types.UpdateTaskRequest) (interface{}, int) {
 	updateData := make(map[string]interface{})
 	if req.Title != "" {
@@ -78,3 +78,9 @@ func (s *TaskService) UpdateTask(ctx context.Context, taskId, userId uint, req *
 }
 
 // DeleteTask
+func (s *TaskService) DeleteTask(ctx context.Context, taskId, userId uint) (interface{}, int) {
+	if err := s.taskDao.DeleteTask(ctx, taskId, userId); err != nil {
+		return nil, e.ERROR
+	}
+	return nil, e.SUCCESS
+}

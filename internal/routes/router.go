@@ -1,11 +1,9 @@
 package routes
 
 import (
-	"time"
 	v1 "to-do-list/internal/api/v1"
 	"to-do-list/internal/middleware"
 
-	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 )
 
@@ -13,16 +11,16 @@ func NewRouter() *gin.Engine {
 	r := gin.Default()
 
 	// 挂载中间件
-	//r.Use(middleware.Cors())
+	r.Use(middleware.Cors())
 
-	r.Use(cors.New(cors.Config{
-		AllowOrigins:     []string{"https://lifetodo.org", "https://www.lifetodo.org", "http://localhost:5173"},
-		AllowMethods:     []string{"GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"},
-		AllowHeaders:     []string{"Origin", "Content-Type", "Authorization", "Accept", "X-Requested-With"},
-		ExposeHeaders:    []string{"Content-Length", "Access-Control-Allow-Origin"},
-		AllowCredentials: true,
-		MaxAge:           12 * time.Hour,
-	}))
+	//r.Use(cors.New(cors.Config{
+	//	AllowOrigins:     []string{"https://lifetodo.org", "https://www.lifetodo.org", "http://localhost:5173"},
+	//	AllowMethods:     []string{"GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"},
+	//	AllowHeaders:     []string{"Origin", "Content-Type", "Authorization", "Accept", "X-Requested-With"},
+	//	ExposeHeaders:    []string{"Content-Length", "Access-Control-Allow-Origin"},
+	//	AllowCredentials: true,
+	//	MaxAge:           12 * time.Hour,
+	//}))
 
 	r.GET("/ping", func(c *gin.Context) {
 		c.JSON(200, gin.H{
@@ -45,11 +43,12 @@ func NewRouter() *gin.Engine {
 		authed.Use(middleware.JWT())
 		{
 			authed.POST("/user/logout", v1.UserLogout)
-
 			taskGroup := authed.Group("/task")
 			{
 				taskGroup.POST("/create", v1.CreateTask)
 				taskGroup.GET("/list", v1.ListTasks)
+				taskGroup.PUT("/:id", v1.UpdateTask)
+				taskGroup.DELETE("/:id", v1.DeleteTask)
 			}
 		}
 	}

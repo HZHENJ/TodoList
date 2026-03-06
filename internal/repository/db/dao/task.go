@@ -11,6 +11,7 @@ type TaskDao interface {
 	CreateTask(ctx context.Context, task *model.Task) error
 	ListTasks(ctx context.Context, userId uint, page, pageSize int) ([]*model.Task, int64, error)
 	UpdateTask(ctx context.Context, taskId, userId uint, updateData map[string]interface{}) error
+	DeleteTask(ctx context.Context, taskId, userId uint) error
 }
 
 type taskDao struct {
@@ -58,5 +59,13 @@ func (dao *taskDao) UpdateTask(ctx context.Context, taskId, userId uint, updateD
 		Where("id = ? AND user_id = ?", taskId, userId).
 		Updates(updateData)
 
+	return result.Error
+}
+
+// DeleteTask 删除任务
+func (dao *taskDao) DeleteTask(ctx context.Context, taskId, userId uint) error {
+	result := dao.db.WithContext(ctx).
+		Where("id = ? AND user_id = ?", taskId, userId).
+		Delete(&model.Task{})
 	return result.Error
 }
